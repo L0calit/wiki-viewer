@@ -1,0 +1,71 @@
+
+<meta charset="utf-8">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css.map" rel="stylesheet" type="text/css">
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+<style>
+    .titre {
+        color: black;
+        font-size: 90px;
+        font-style: bold;
+        text-align: center;
+        font: Monospace;
+        font-style: italic;
+        font-weight: bold;
+    }
+    .search-box {
+        text-align: center;
+        font: Monospace;
+    }
+    .random {
+        text-align: center;
+        font: Monospace;
+    }
+    th {
+        border: 1px solid black;
+    }
+    a {
+        color: black;
+        text-decoration: none;
+        font-weight: normal;
+        text-align: center;
+    }
+    .sous-titre {
+        font-weight: bold;
+        text-decoration: underline;
+        font-style: italic;
+        font-size: 22px;
+    }
+</style>
+
+<head>
+    <title> Wiki-viewer </title>
+</head>
+
+<script>
+    function recherche() {
+        var text = document.getElementById('textbox').value;
+        $.getJSON("https://en.wikipedia.org/w/api.php?action=query&format=json&srlimit=15&list=search&origin=*&srsearch=" + text, function(reponse) {
+            var txt = "<table><caption class='sous-titre'>Resultats de la recherche: " + text + "</caption>";
+            for (var id in reponse.query.search) {
+                txt += "<tr><th><a href=https://en.wikipedia.org/?curid=" + reponse.query.search[id].pageid + ">" + reponse.query.search[id].title + ": " + reponse.query.search[id].snippet + "</a></th></tr>";
+            }
+            $("#liste").html(txt + "</table>");
+        });
+    }
+</script>
+
+<div class="page">
+    <div class="titre">
+        Wiki-viewer
+    </div>
+    <form class="search-box" action="javascript:void(0);" method="post">
+        <input type="text" id="textbox">
+        <input type="submit" name="search" value="Search" onclick="recherche()">
+    </form>
+    <div class="random">
+        <a href="https://en.wikipedia.org/wiki/Special:Random" ><button type="button" name="random"> Random article</button></a><br><br>
+    </div>
+    <div class="random" id="liste">
+    </div>
+</div>
